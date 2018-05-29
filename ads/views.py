@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.shortcuts import render
 
 from ads.models import Ad
 
@@ -12,11 +12,8 @@ def home(request):
     # recuperar los anuncios de la base de datos
     ads = Ad.objects.all()
 
-    # construir el documento HTML
-    html = '<ul>'
-    for ad in ads:
-        html += '<li>{0}</li>'.format(ad)
-    html += '</ul>'
+    # creamos contexto
+    context = {'items': ads}
 
-    # devolver la respuesta
-    return HttpResponse(html)
+    # devolver la respuesta utilizando una plantilla
+    return render(request, 'ads/list.html', context)
