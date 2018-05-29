@@ -10,10 +10,10 @@ def home(request):
     :return: HttpResponse con respuesta
     """
     # recuperar los anuncios de la base de datos
-    ads = Ad.objects.all()
+    ads = Ad.objects.filter(status=Ad.PENDING).order_by('-created_on')
 
     # creamos contexto
-    context = {'items': ads}
+    context = {'items': ads[:5]}
 
     # devolver la respuesta utilizando una plantilla
     return render(request, 'ads/list.html', context)
