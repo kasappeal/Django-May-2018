@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ ad.name }}</title>
+</head>
+<body>
+    <h1>{{ ad.name }}</h1>
+    <h2>{{ ad.price }} €</h2>
+    <img src="{{ ad.image.url }}" alt="{{ ad.name }}" title="{{ ad.name }}">
+    <p>{{ ad.description }}</p>
+    <ul>
+        <li>
+            <strong>Propietario:</strong> {{ ad.owner.first_name }} {{ ad.owner.last_name }}
+        </li>
+        <li>
+            <strong>Tipo:</strong> {{ ad.type }}
+        </li>
+        <li>
+            <strong>Estado:</strong> {{ ad.status }}
+        </li>
+    </ul>
+</body>
+</html>
