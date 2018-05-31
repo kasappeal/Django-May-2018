@@ -10,17 +10,10 @@
     {% endfor %}
 {% endif %}
 
-<form method="post">
+<form method="post" novalidate>
     {% csrf_token %}
-    <div>
-        Username:
-        <input type="text" name="username">
-    </div>
 
-    <div>
-        Password:
-        <input type="password" name="password">
-    </div>
+    {{ form.as_p }}
 
     <button type="submit">Login</button>
 

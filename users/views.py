@@ -3,6 +3,8 @@ from django.contrib.auth import authenticate
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as django_login, logout as django_logout
 
+from users.forms import LoginForm
+
 
 def login(request):
     """
@@ -12,19 +14,23 @@ def login(request):
     """
     # si la petición es POST, entonces tenemos que hacer el login
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            # comprobamos si las credenciales son correctas
+            user = authenticate(username=username, password=password)
+            if user is None:
+                messages.error(request, 'Usuario o contraseña incorrecto')
+            else:
+                # iniciamos la sesión del usuario (hacemos login del usuario)
+                django_login(request, user)
+                return redirect('home')
+    else:
+        form = LoginForm()
 
-        # comprobamos si las credenciales son correctas
-        user = authenticate(username=username, password=password)
-        if user is None:
-            messages.error(request, 'Usuario o contraseña incorrecto')
-        else:
-            # iniciamos la sesión del usuario (hacemos login del usuario)
-            django_login(request, user)
-            return redirect('home')
-
-    return render(request, 'users/login.html')
+    context = {'form': form}
+    return render(request, 'users/login.html', context)
 
 
 def logout(request):
