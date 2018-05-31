@@ -4,8 +4,10 @@
 
 {% block body %}
 
-{% if error %}
-    <div style="color:red">Usuario o contraseña incorrectos.</div>
+{% if messages %}
+    {% for message in messages %}
+        <div style="color:red">{{ message }}</div>
+    {% endfor %}
 {% endif %}
 
 <form method="post">
