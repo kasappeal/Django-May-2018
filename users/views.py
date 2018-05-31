@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.shortcuts import render, redirect
-from django.contrib.auth import login as django_login
+from django.contrib.auth import login as django_login, logout as django_logout
 
 
 def login(request):
@@ -25,3 +25,13 @@ def login(request):
             return redirect('home')
 
     return render(request, 'users/login.html')
+
+
+def logout(request):
+    """
+    Hace logout de un usuario y le redirige al login
+    :param request: objeto HttpRequest
+    :return: objeto HttpResponse de redirección al login
+    """
+    django_logout(request)
+    return redirect('login')

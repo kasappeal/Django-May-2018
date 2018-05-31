@@ -19,13 +19,14 @@ from django.contrib import admin
 from django.urls import path
 
 from ads.views import home, ad_detail
-from users.views import login
+from users.views import login, logout
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('', home, name='home'),
     path('anuncio/<int:pk>', ad_detail, name='ad-detail'),
-    path('login', login, name='users:login')
+    path('login', login, name='login'),
+    path('logout', logout, name='logout')
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
