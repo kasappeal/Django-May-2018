@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ ad.name }}</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %} {{ ad.name }} {% endblock %}
+
+{% block body %}
     <h1>{{ ad.name }}</h1>
     <h2>{{ ad.price }} €</h2>
     <img src="{{ ad.image.url }}" alt="{{ ad.name }}" title="{{ ad.name }}">
@@ -14,11 +12,10 @@
             <strong>Propietario:</strong> {{ ad.owner.first_name }} {{ ad.owner.last_name }}
         </li>
         <li>
-            <strong>Tipo:</strong> {{ ad.type }}
+            <strong>Tipo:</strong> {{ ad.get_type_display }}
         </li>
         <li>
-            <strong>Estado:</strong> {{ ad.status }}
+            <strong>Estado:</strong> {{ ad.get_status_display }}
         </li>
     </ul>
-</body>
-</html>
+{% endblock %}

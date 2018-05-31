@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} DjangoPop {% endblock %}</title>
+    <style>
+        .ad { float: left; width: 200px; }
+        .ad img { width: 200px; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/">Home</a>
+        <hr>
+    </nav>
+    {% block body %}{% endblock %}
+</body>
+</html>
