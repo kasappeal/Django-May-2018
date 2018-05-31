@@ -23,7 +23,7 @@ from ads.views import home, ad_detail
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('', home),
-    path('ad/<int:pk>', ad_detail)
+    path('', home, name='home'),
+    path('anuncio/<int:pk>', ad_detail, name='ad-detail')
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
