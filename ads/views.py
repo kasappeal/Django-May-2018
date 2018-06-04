@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render
 
@@ -43,6 +44,7 @@ def ad_detail(request, pk):
     return render(request, 'ads/detail.html', context)
 
 
+@login_required
 def ad_form(request):
     """
     Muestra el formulario para crear un anuncio y lo procesa
