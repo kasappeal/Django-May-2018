@@ -25,7 +25,8 @@ def login(request):
             else:
                 # iniciamos la sesión del usuario (hacemos login del usuario)
                 django_login(request, user)
-                return redirect('home')
+                url = request.GET.get('next', 'home')
+                return redirect(url)
     else:
         form = LoginForm()
 
