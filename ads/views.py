@@ -51,7 +51,9 @@ def ad_form(request):
     """
     # si la peticion es post, entonces tenemos que crear el anuncio
     if request.method == 'POST':
-        form = AdForm(request.POST, request.FILES)
+        ad = Ad()
+        ad.owner = request.user
+        form = AdForm(request.POST, request.FILES, instance=ad)
         if form.is_valid():
             # creamos el anuncio
             ad = form.save()

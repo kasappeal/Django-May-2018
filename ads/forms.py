@@ -8,3 +8,4 @@ class AdForm(ModelForm):
     class Meta:
         model = Ad
         fields = '__all__'
+        exclude = ['owner', 'status']
