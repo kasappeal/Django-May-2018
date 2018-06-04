@@ -1,6 +1,8 @@
+from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render
 
+from ads.forms import AdForm
 from ads.models import Ad
 
 
@@ -39,3 +41,26 @@ def ad_detail(request, pk):
 
     # devolver la respuesta utilizando una plantilla
     return render(request, 'ads/detail.html', context)
+
+
+def ad_form(request):
+    """
+    Muestra el formulario para crear un anuncio y lo procesa
+    :param request: objeto HttpRequest
+    :return: HttpResponse con la respuesta
+    """
+    # si la peticion es post, entonces tenemos que crear el anuncio
+    if request.method == 'POST':
+        form = AdForm(request.POST, request.FILES)
+        if form.is_valid():
+            # creamos el anuncio
+            ad = form.save()
+            # limpiar el formulario
+            form = AdForm()
+            # Devolvemos un mensaje de OK
+            messages.success(request, 'Anuncio creado correctamente')
+    else:
+        # si no es post, tenemos que mostrar un formulario vacío
+        form = AdForm()
+    context = {'form': form}
+    return render(request, 'ads/form.html', context)

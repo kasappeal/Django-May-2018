@@ -1,17 +1,18 @@
 {% extends "base.html" %}
 
-{% block title %} Login {% endblock %}
+{% block title %} Nuevo anuncio {% endblock %}
 
 {% block body %}
 
 {% include 'includes/messages.html' %}
 
-<form method="post" novalidate>
+<form method="post" enctype="multipart/form-data" novalidate>
+
     {% csrf_token %}
 
     {{ form.as_p }}
 
-    <button type="submit">Login</button>
+    <button>Crear anuncio</button>
 
 </form>
 
