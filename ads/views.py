@@ -4,27 +4,20 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.generic import ListView
 
 from ads.forms import AdForm
 from ads.models import Ad
 
 
-class HomeView(View):
+class HomeView(ListView):
 
-    def get(self, request):
-        """
-        Muestra el listado de los últimos anuncios
-        :param request: objeto HttpRequest
-        :return: HttpResponse con respuesta
-        """
-        # recuperar los anuncios de la base de datos
-        ads = Ad.objects.filter(status=Ad.PENDING).order_by('-created_on')
+    model = Ad
+    template_name = 'ads/list.html'
 
-        # creamos contexto
-        context = {'items': ads[:5]}
-
-        # devolver la respuesta utilizando una plantilla
-        return render(request, 'ads/list.html', context)
+    def get_queryset(self):
+        result = super().get_queryset()
+        return result.filter(status=Ad.PENDING).order_by('-created_on')[:5]
 
 
 class AdDetailView(View):

@@ -5,7 +5,7 @@
 
     <p>Una plataforma de anuncios creada con Django!</p>
 
-    {% for ad in items %}
+    {% for ad in object_list %}
         <a href="{% url 'ad-detail' ad.pk %}">
             <div class="ad">
                 <img src="{{ ad.image.url }}" alt="{{ ad.name }}" title="{{ ad.name }}">
