@@ -13,6 +13,8 @@
         <a href="{% url 'home' %}">Home</a>
         |
         {% if user.is_authenticated %}
+            <a href="{% url 'my-ads' %}">Mis anuncios</a>
+            |
             <a href="{% url 'ad-form' %}">Nuevo anuncio</a>
             |
             Hola {{ user.first_name }},

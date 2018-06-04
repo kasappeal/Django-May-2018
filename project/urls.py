@@ -18,13 +18,14 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 
-from ads.views import HomeView, AdDetailView, AdFormView
+from ads.views import HomeView, AdDetailView, AdFormView, MyAdsView
 from users.views import LogoutView, LoginView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('', HomeView.as_view(), name='home'),
+    path('mis-anuncios', MyAdsView.as_view(), name='my-ads'),
     path('anuncio/nuevo', AdFormView.as_view(), name='ad-form'),
     path('anuncio/<int:pk>', AdDetailView.as_view(), name='ad-detail'),
     path('login', LoginView.as_view(), name='login'),

@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block body %}
-    <h1>Django POP</h1>
+    <h1>{{ title }}</h1>
 
-    <p>Una plataforma de anuncios creada con Django!</p>
+    <p>{{ claim }}</p>
 
     {% for ad in object_list %}
         <a href="{% url 'ad-detail' ad.pk %}">

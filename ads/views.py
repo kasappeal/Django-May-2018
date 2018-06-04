@@ -19,6 +19,29 @@ class HomeView(ListView):
         result = super().get_queryset()
         return result.filter(status=Ad.PENDING).order_by('-created_on')[:5]
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Django Pop'
+        context['claim'] = 'Una plataforma de anuncios hecha con Django'
+        return context
+
+
+@method_decorator(login_required, name='dispatch')
+class MyAdsView(ListView):
+
+    model = Ad
+    template_name = 'ads/list.html'
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(owner=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Mis anuncios'
+        context['claim'] = 'Este listado es de los anuncios que has creado tú'
+        return context
+
 
 class AdDetailView(View):
 
