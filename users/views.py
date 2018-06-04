@@ -2,18 +2,29 @@ from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as django_login, logout as django_logout
+from django.views import View
 
 from users.forms import LoginForm
 
 
-def login(request):
-    """
-    Muestra el formulario de login y procesa el login de un usuario
-    :param request: objeto HttpRequest
-    :return: objeto HttpResponse con el formulario renderizado
-    """
-    # si la petición es POST, entonces tenemos que hacer el login
-    if request.method == 'POST':
+class LoginView(View):
+
+    def get(self, request):
+        """
+        Muestra el formulario de login
+        :param request: objeto HttpRequest
+        :return: objeto HttpResponse con el formulario renderizado
+        """
+        form = LoginForm()
+        context = {'form': form}
+        return render(request, 'users/login.html', context)
+
+    def post(self, request):
+        """
+        Procesa el login de un usuario
+        :param request: objeto HttpRequest
+        :return: objeto HttpResponse con el formulario renderizado
+        """
         form = LoginForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data.get('username')
@@ -27,18 +38,18 @@ def login(request):
                 django_login(request, user)
                 url = request.GET.get('next', 'home')
                 return redirect(url)
-    else:
-        form = LoginForm()
 
-    context = {'form': form}
-    return render(request, 'users/login.html', context)
+        context = {'form': form}
+        return render(request, 'users/login.html', context)
 
 
-def logout(request):
-    """
-    Hace logout de un usuario y le redirige al login
-    :param request: objeto HttpRequest
-    :return: objeto HttpResponse de redirección al login
-    """
-    django_logout(request)
-    return redirect('login')
+class LogoutView(View):
+
+    def get(self, request):
+        """
+        Hace logout de un usuario y le redirige al login
+        :param request: objeto HttpRequest
+        :return: objeto HttpResponse de redirección al login
+        """
+        django_logout(request)
+        return redirect('login')
