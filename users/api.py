@@ -45,3 +45,29 @@ class UserDetailAPI(APIView):
         user = get_object_or_404(User, pk=pk)
         serializer = UserSerializer(user)
         return Response(serializer.data)
+
+    def delete(self, request, pk):
+        """
+        Borra el usuario con pk <pk> si existe.
+        :param request: objeto de tipo HttpRequest
+        :param pk: pk del usuario que queremos borrar
+        :return: 204 o 404
+        """
+        user = get_object_or_404(User, pk=pk)
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def put(self, request, pk):
+        """
+        Actualiza el usuario con pk <pk> si existe.
+        :param request: objeto de tipo HttpRequest
+        :param pk: pk del usuario que queremos actualizar
+        :return: 202 si OK o 400 con errores
+        """
+        user = get_object_or_404(User, pk=pk)
+        serializer = UserSerializer(user, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

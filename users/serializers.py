@@ -16,9 +16,12 @@ class UserSerializer(UserListSerializer):
 
     def create(self, validated_data):
         user = User()
-        user.username = validated_data.get('username')
-        user.first_name = validated_data.get('first_name')
-        user.last_name = validated_data.get('last_name')
-        user.set_password(validated_data.get('password'))
-        user.save()
-        return user
+        return self.update(user, validated_data)
+
+    def update(self, instance, validated_data):
+        instance.username = validated_data.get('username')
+        instance.first_name = validated_data.get('first_name')
+        instance.last_name = validated_data.get('last_name')
+        instance.set_password(validated_data.get('password'))
+        instance.save()
+        return instance
