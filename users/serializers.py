@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 
-class UserSerializer(serializers.Serializer):
+class UserListSerializer(serializers.Serializer):
 
     id = serializers.ReadOnlyField()
     username = serializers.CharField()
