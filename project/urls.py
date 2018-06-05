@@ -19,6 +19,7 @@ from django.contrib import admin
 from django.urls import path
 
 from ads.views import HomeView, AdDetailView, AdFormView, MyAdsView
+from users.api import UsersAPI
 from users.views import LogoutView, LoginView
 
 urlpatterns = [
@@ -29,6 +30,9 @@ urlpatterns = [
     path('anuncio/nuevo', AdFormView.as_view(), name='ad-form'),
     path('anuncio/<int:pk>', AdDetailView.as_view(), name='ad-detail'),
     path('login', LoginView.as_view(), name='login'),
-    path('logout', LogoutView.as_view(), name='logout')
+    path('logout', LogoutView.as_view(), name='logout'),
+
+    # API URLs
+    path('api/v1/users/', UsersAPI.as_view(), name='api-users')
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
