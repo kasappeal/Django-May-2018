@@ -3,7 +3,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from users.serializers import UserSerializer
+from users.serializers import UserSerializer, UserListSerializer
 
 
 class UsersAPI(APIView):
@@ -15,7 +15,7 @@ class UsersAPI(APIView):
         :return: objeto Response con datos de los usuarios
         """
         users = User.objects.all()
-        serializer = UserSerializer(users, many=True)
+        serializer = UserListSerializer(users, many=True)
         return Response(serializer.data)
 
 
