@@ -42,3 +42,10 @@ class AdAdmin(admin.ModelAdmin):
             'classes': ['collapse']
         }]
     ]
+
+
+
+# Cambiamos el título del admin
+admin.site.site_header = 'Django Pop Admin'
+admin.site.site_title = 'Django Pop Admin'
+admin.site.index_title = 'Dashboard'
