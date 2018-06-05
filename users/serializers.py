@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 
 class UserListSerializer(serializers.Serializer):
@@ -25,3 +26,9 @@ class UserSerializer(UserListSerializer):
         instance.set_password(validated_data.get('password'))
         instance.save()
         return instance
+
+    def validate_username(self, username):
+        if (self.instance is None or self.instance.username != username) and User.objects.filter(username=username).exists():
+            raise ValidationError('Ya existe un usuario con ese username')
+
+        return username
