@@ -1,29 +1,33 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>{% block title %} DjangoPop {% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
     <style>
         .ad { float: left; width: 200px; }
         .ad img { width: 200px; }
     </style>
 </head>
 <body>
-    <nav>
-        <a href="{% url 'home' %}">Home</a>
-        |
-        {% if user.is_authenticated %}
-            <a href="{% url 'my-ads' %}">Mis anuncios</a>
+    <div class="container">
+        <nav>
+            <a href="{% url 'home' %}">Home</a>
             |
-            <a href="{% url 'ad-form' %}">Nuevo anuncio</a>
-            |
-            Hola {{ user.first_name }},
-            <a href="{% url 'logout' %}">logout</a>
-        {% else %}
-            <a href="{% url 'login' %}">Login</a>
-        {% endif %}
-        <hr>
-    </nav>
-    {% block body %}{% endblock %}
+            {% if user.is_authenticated %}
+                <a href="{% url 'my-ads' %}">Mis anuncios</a>
+                |
+                <a href="{% url 'ad-form' %}">Nuevo anuncio</a>
+                |
+                Hola {{ user.first_name }},
+                <a href="{% url 'logout' %}">logout</a>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+            {% endif %}
+            <hr>
+        </nav>
+        {% block body %}{% endblock %}
+    </div>
 </body>
 </html>
