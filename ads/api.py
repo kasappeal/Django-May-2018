@@ -1,3 +1,4 @@
+from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
@@ -11,6 +12,9 @@ class AdViewSet(ModelViewSet):
 
     queryset = Ad.objects.all()
     permission_classes = [AdPermissions]
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ['name', 'price', 'owner__first_name', 'owner__last_name', 'owner__username']
+    ordering_fields = ['price', 'name', 'type']
 
     def get_serializer_class(self):
         if self.action == 'create':
