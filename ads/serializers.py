@@ -11,6 +11,14 @@ class AdListSerializer(ModelSerializer):
         fields = ['id', 'name', 'image', 'price']
 
 
+class NewAdSerializer(ModelSerializer):
+
+    class Meta:
+
+        model = Ad
+        fields = ['name', 'description', 'price', 'image', 'send_choice', 'type']
+
+
 class AdDetailSerializer(ModelSerializer):
 
     class Meta:
