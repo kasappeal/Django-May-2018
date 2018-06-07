@@ -7,14 +7,13 @@ class UserPermission(BasePermission):
         """
         Define si el usuario puede realizar la acción (GET, POST, PUT, DELETE) que quiere realizar sobre la vista <view>
         """
-        from users.api import UserDetailAPI
-
-        if request.method == 'POST':
+        if view.action == 'create':
             return True
 
-        if request.user.is_authenticated and (
-            request.method != 'GET' or request.user.is_superuser or isinstance(view, UserDetailAPI)
-        ):
+        if request.user.is_authenticated and view.action in ['retrieve', 'update', 'destroy']:
+            return True
+
+        if view.action == 'list' and request.user.is_superuser:
             return True
 
         return False

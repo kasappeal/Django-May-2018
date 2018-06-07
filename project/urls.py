@@ -16,12 +16,19 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 
-from ads.api import AdListAPI, AdDetailAPI, MyAdsAPI
+from ads.api import MyAdsAPI, AdViewSet
 from ads.views import HomeView, AdDetailView, AdFormView, MyAdsView
-from users.api import UsersAPI, UserDetailAPI
+from users.api import UserViewSet
 from users.views import LogoutView, LoginView
+
+
+router = DefaultRouter()
+router.register('ads', AdViewSet)
+router.register('users', UserViewSet, base_name='users')
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,11 +41,7 @@ urlpatterns = [
     path('logout', LogoutView.as_view(), name='logout'),
 
     # API URLs
-    path('api/v1/users/', UsersAPI.as_view(), name='api-users'),
-    path('api/v1/users/<int:pk>/', UserDetailAPI.as_view(), name='api-user-detail'),
-
-    path('api/v1/ads/', AdListAPI.as_view(), name='api-ads'),
-    path('api/v1/ads/<int:pk>/', AdDetailAPI.as_view(), name='api-ads-detail'),
+    path('api/v1/', include(router.urls)),
     path('api/v1/ads/mine/', MyAdsAPI.as_view(), name='api-ads-mine')
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

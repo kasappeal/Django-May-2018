@@ -1,13 +1,14 @@
 from django.contrib.auth.models import User
 from rest_framework import status
-from rest_framework.generics import get_object_or_404, GenericAPIView
+from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
 
 from users.permissions import UserPermission
 from users.serializers import UserSerializer, UserListSerializer
 
 
-class UsersAPI(GenericAPIView):
+class UserViewSet(GenericViewSet):
 
     queryset = User.objects.all()
     permission_classes = [UserPermission]
@@ -15,7 +16,7 @@ class UsersAPI(GenericAPIView):
     def get_serializer_class(self):
         return UserSerializer if self.request.method == 'POST' else UserListSerializer
 
-    def get(self, request):
+    def list(self, request):
         """
         Devuelve el listado de usuarios en formato JSON
         :param request: objeto de tipo HttpRequest
@@ -27,7 +28,7 @@ class UsersAPI(GenericAPIView):
         serializer = serializer_class(users, many=True)
         return self.get_paginated_response(serializer.data)
 
-    def post(self, request):
+    def create(self, request):
         """
         Crea un usuario y devuelve la información del usuario creado
         :param request: objeto de tipo HttpRequest
@@ -41,12 +42,7 @@ class UsersAPI(GenericAPIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-class UserDetailAPI(GenericAPIView):
-
-    permission_classes = [UserPermission]
-
-    def get(self, request, pk):
+    def retrieve(self, request, pk):
         """
         Devuelve el detalle del usuario con pk <pk>
         :param request: objeto de tipo HttpRequest
@@ -58,7 +54,7 @@ class UserDetailAPI(GenericAPIView):
         serializer = UserSerializer(user)
         return Response(serializer.data)
 
-    def delete(self, request, pk):
+    def destroy(self, request, pk):
         """
         Borra el usuario con pk <pk> si existe.
         :param request: objeto de tipo HttpRequest
@@ -70,7 +66,7 @@ class UserDetailAPI(GenericAPIView):
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    def put(self, request, pk):
+    def update(self, request, pk):
         """
         Actualiza el usuario con pk <pk> si existe.
         :param request: objeto de tipo HttpRequest

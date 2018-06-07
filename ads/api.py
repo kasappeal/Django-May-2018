@@ -1,28 +1,30 @@
-from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView, ListAPIView
+from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.viewsets import ModelViewSet
 
 from ads.models import Ad
 from ads.permissions import AdPermissions
 from ads.serializers import AdListSerializer, AdDetailSerializer, NewAdSerializer
 
 
-class AdListAPI(ListCreateAPIView):
+class AdViewSet(ModelViewSet):
 
     queryset = Ad.objects.all()
     permission_classes = [AdPermissions]
 
     def get_serializer_class(self):
-        return NewAdSerializer if self.request.method == 'POST' else AdListSerializer
+        if self.action == 'create':
+            return NewAdSerializer
+        elif self.action == 'list':
+            return AdListSerializer
+        else:
+            return AdDetailSerializer
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
-
-class AdDetailAPI(RetrieveUpdateDestroyAPIView):
-
-    queryset = Ad.objects.all()
-    serializer_class = AdDetailSerializer
-    permission_classes = [AdPermissions]
+    def perform_update(self, serializer):
+        serializer.save(owner=self.request.user)
 
 
 class MyAdsAPI(ListAPIView):
