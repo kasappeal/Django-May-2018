@@ -3,12 +3,14 @@ from rest_framework import status
 from rest_framework.generics import get_object_or_404, GenericAPIView
 from rest_framework.response import Response
 
+from users.permissions import UserPermission
 from users.serializers import UserSerializer, UserListSerializer
 
 
 class UsersAPI(GenericAPIView):
 
     queryset = User.objects.all()
+    permission_classes = [UserPermission]
 
     def get_serializer_class(self):
         return UserSerializer if self.request.method == 'POST' else UserListSerializer
@@ -42,6 +44,8 @@ class UsersAPI(GenericAPIView):
 
 class UserDetailAPI(GenericAPIView):
 
+    permission_classes = [UserPermission]
+
     def get(self, request, pk):
         """
         Devuelve el detalle del usuario con pk <pk>
@@ -50,6 +54,7 @@ class UserDetailAPI(GenericAPIView):
         :return: objeto Response con datos del usuario o 404
         """
         user = get_object_or_404(User, pk=pk)
+        self.check_object_permissions(request, user)
         serializer = UserSerializer(user)
         return Response(serializer.data)
 
@@ -61,6 +66,7 @@ class UserDetailAPI(GenericAPIView):
         :return: 204 o 404
         """
         user = get_object_or_404(User, pk=pk)
+        self.check_object_permissions(request, user)
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -72,6 +78,7 @@ class UserDetailAPI(GenericAPIView):
         :return: 202 si OK o 400 con errores
         """
         user = get_object_or_404(User, pk=pk)
+        self.check_object_permissions(request, user)
         serializer = UserSerializer(user, data=request.data)
         if serializer.is_valid():
             serializer.save()
