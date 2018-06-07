@@ -1,17 +1,18 @@
-from rest_framework.generics import ListAPIView, RetrieveAPIView
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView
 
 from ads.models import Ad
 from ads.serializers import AdListSerializer, AdDetailSerializer
 
 
-class AdListAPI(ListAPIView):
+class AdListAPI(ListCreateAPIView):
 
     queryset = Ad.objects.all()
-    serializer_class = AdListSerializer
+
+    def get_serializer_class(self):
+        return AdDetailSerializer if self.request.method == 'POST' else AdListSerializer
 
 
-class AdDetailAPI(RetrieveAPIView):
+class AdDetailAPI(RetrieveUpdateDestroyAPIView):
 
     queryset = Ad.objects.all()
     serializer_class = AdDetailSerializer
-
