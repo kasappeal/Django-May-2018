@@ -1,13 +1,13 @@
 from django.contrib.auth.models import User
 from rest_framework import status
-from rest_framework.generics import get_object_or_404
+from rest_framework.generics import get_object_or_404, GenericAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from users.serializers import UserSerializer, UserListSerializer
 
 
-class UsersAPI(APIView):
+class UsersAPI(GenericAPIView):
 
     def get(self, request):
         """
@@ -15,9 +15,10 @@ class UsersAPI(APIView):
         :param request: objeto de tipo HttpRequest
         :return: objeto Response con datos de los usuarios
         """
-        users = User.objects.all()
+        queryset = User.objects.all()
+        users = self.paginate_queryset(queryset)
         serializer = UserListSerializer(users, many=True)
-        return Response(serializer.data)
+        return self.get_paginated_response(serializer.data)
 
     def post(self, request):
         """
@@ -33,7 +34,7 @@ class UsersAPI(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserDetailAPI(APIView):
+class UserDetailAPI(GenericAPIView):
 
     def get(self, request, pk):
         """
