@@ -1,5 +1,5 @@
-from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView, ListAPIView
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 
 from ads.models import Ad
 from ads.serializers import AdListSerializer, AdDetailSerializer, NewAdSerializer
@@ -23,3 +23,11 @@ class AdDetailAPI(RetrieveUpdateDestroyAPIView):
     serializer_class = AdDetailSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
+
+class MyAdsAPI(ListAPIView):
+
+    serializer_class = AdListSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Ad.objects.filter(owner=self.request.user)
