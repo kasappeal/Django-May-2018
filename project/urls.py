@@ -18,7 +18,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 
-from ads.api import AdListAPI
+from ads.api import AdListAPI, AdDetailAPI
 from ads.views import HomeView, AdDetailView, AdFormView, MyAdsView
 from users.api import UsersAPI, UserDetailAPI
 from users.views import LogoutView, LoginView
@@ -37,6 +37,7 @@ urlpatterns = [
     path('api/v1/users/', UsersAPI.as_view(), name='api-users'),
     path('api/v1/users/<int:pk>/', UserDetailAPI.as_view(), name='api-user-detail'),
 
-    path('api/v1/ads/', AdListAPI.as_view(), name='api-ads')
+    path('api/v1/ads/', AdListAPI.as_view(), name='api-ads'),
+    path('api/v1/ads/<int:pk>/', AdDetailAPI.as_view(), name='api-ads-detail')
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
