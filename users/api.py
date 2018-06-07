@@ -9,15 +9,21 @@ from users.serializers import UserSerializer, UserListSerializer
 
 class UsersAPI(GenericAPIView):
 
+    queryset = User.objects.all()
+
+    def get_serializer_class(self):
+        return UserSerializer if self.request.method == 'POST' else UserListSerializer
+
     def get(self, request):
         """
         Devuelve el listado de usuarios en formato JSON
         :param request: objeto de tipo HttpRequest
         :return: objeto Response con datos de los usuarios
         """
-        queryset = User.objects.all()
+        queryset = self.queryset
         users = self.paginate_queryset(queryset)
-        serializer = UserListSerializer(users, many=True)
+        serializer_class = self.get_serializer_class()
+        serializer = serializer_class(users, many=True)
         return self.get_paginated_response(serializer.data)
 
     def post(self, request):
@@ -26,7 +32,8 @@ class UsersAPI(GenericAPIView):
         :param request: objeto de tipo HttpRequest
         :return:  objeto Response con datos del usuario creado o 400 con los errores cometidos
         """
-        serializer = UserSerializer(data=request.data)
+        serializer_class = self.get_serializer_class()
+        serializer = serializer_class(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
